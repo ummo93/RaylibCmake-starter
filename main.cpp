@@ -1,9 +1,10 @@
-﻿#include "TestLibCmake.h"
+﻿#include <iostream>
+#include "raylib.h"
 
 
 int main()
 {
-	InitWindow(800, 450, "raylib [core] example - basic window");
+    InitWindow(800, 450, "raylib [core] example - basic window");
 
     while (!WindowShouldClose())
     {
@@ -14,5 +15,5 @@ int main()
     }
 
     CloseWindow();
-	return 0;
+    return 0;
 }
