@@ -27,8 +27,8 @@ if(WIN32)
         user32 
         shell32
     )
-    
 elseif(UNIX AND NOT APPLE)
+    #TODO: If Linux do not forget to download raylib for linux and put it into /libs/raylib-5.5 folder
     add_executable(${PROJECT_NAME} "TestLibCmake.cpp" "TestLibCmake.h")
     target_link_options(${PROJECT_NAME} PRIVATE ${SUBSYSTEM_LINKER_OPTIONS})
     if (CMAKE_BUILD_TYPE STREQUAL Release) 
