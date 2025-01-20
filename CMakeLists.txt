@@ -10,12 +10,15 @@ project ("CMakeRaylibStarter")
 
 include_directories("${CMAKE_SOURCE_DIR}/libs/raylib-5.5/include")
 link_directories("${CMAKE_SOURCE_DIR}/libs/raylib-5.5/lib")
+include_directories("include")
+
+file(GLOB PROJECT_SOURCES "src/*.cpp")
 
 if(WIN32)
     if (CMAKE_BUILD_TYPE STREQUAL Release) 
-        add_executable(${PROJECT_NAME} WIN32 "main.cpp")
+        add_executable(${PROJECT_NAME} WIN32 ${PROJECT_SOURCES})
     else()
-        add_executable(${PROJECT_NAME} "main.cpp" )
+        add_executable(${PROJECT_NAME} ${PROJECT_SOURCES})
     endif()
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /SUBSYSTEM:WINDOWS /ENTRY:mainCRTStartup")
     target_link_libraries(${PROJECT_NAME}
@@ -29,7 +32,7 @@ if(WIN32)
     )
 elseif(UNIX AND NOT APPLE)
     #TODO: If Linux do not forget to download raylib for linux and put it into /libs/raylib-5.5 folder
-    add_executable(${PROJECT_NAME} "main.cpp")
+    add_executable(${PROJECT_NAME} ${PROJECT_SOURCES})
     if (CMAKE_BUILD_TYPE STREQUAL Release) 
         set(SUBSYSTEM_LINKER_OPTIONS "-mwindows")   
     endif()
@@ -44,6 +47,12 @@ elseif(UNIX AND NOT APPLE)
         X11     # X11 window system
     )
 endif()
+
+#Copy all resources to the build
+add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+                   COMMAND ${CMAKE_COMMAND} -E copy_directory
+                       ${CMAKE_SOURCE_DIR}/resources $<TARGET_FILE_DIR:${PROJECT_NAME}>/resources
+)
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)
   set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD 20)
